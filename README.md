@@ -11,6 +11,14 @@
     - [What alternatives are there for Jenkins](#what-alternatives-are-there-for-jenkins)
   - [Why build a pipeline? Business value?](#why-build-a-pipeline-business-value)
   - [Diagram of CI/CD](#diagram-of-cicd)
+- [CI / CD pipeline](#ci--cd-pipeline)
+  - [Why build a CI/CD pipeline?](#why-build-a-cicd-pipeline)
+  - [Why Jenkins?](#why-jenkins)
+  - [Buniness value?](#buniness-value)
+- [Jenkins](#jenkins)
+  - [Log in into Jenkins](#log-in-into-jenkins)
+  - [Create a new job(or + New Item)](#create-a-new-jobor--new-item)
+  - [Configure:](#configure)
 
 ## What is CI? Benefits?
  
@@ -76,3 +84,65 @@
 *Understand SDLC workflow: plan, design, develop, deploy*
  
 **SDLC Workflow**: Sequential phases where requirements are planned, solutions designed, software developed, and then deployed to production, ensuring systematic development.
+
+
+
+# CI / CD pipeline
+
+![CI-CD](./cd-ci.jpg)
+
+
+## Why build a CI/CD pipeline?
+- run one command to do it all
+- done in minutes
+
+## Why Jenkins?
+- industry standard (been in indrustry for a while)
+- free to use
+- open source
+- powerful and many plugins 
+- help us to understand the CI/CD pipeline
+
+## Buniness value?
+- save time -> save money
+
+
+
+
+
+# Jenkins 
+
+
+## Log in into Jenkins
+ 
+1. Having a server already set up with the **user name** and **passord** 
+2. Log in with the username and passord
+
+![jenkins](images/jenkins.jpg)
+
+## Create a new job(or + New Item)
+
+1. Click on the **Create a new job** 
+   
+![project](images/project.jpg)
+
+2. **Enter a item name** : `maria-first-project`
+   
+3.  Select **Freestyle project** then click **OK**
+  
+## Configure:
+
+![configure](images/configure.jpg)
+ 
+1. **Description** : testing jenkins
+2. **Enable Discard old builds**
+3. **Max # of builds to keep** : `5` 
+   
+4. **Build Steps**
+   - click build steps
+  
+    ![build stage](<images/build steps.jpg>)
+  
+     - select execute shell
+
+    ![execute shell](<images/execute shell.jpg>)
