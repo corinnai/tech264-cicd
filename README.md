@@ -19,6 +19,20 @@
   - [Log in into Jenkins](#log-in-into-jenkins)
   - [Create a new job(or + New Item)](#create-a-new-jobor--new-item)
   - [Configure:](#configure)
+  - [Run the project](#run-the-project)
+  - [Link two projects](#link-two-projects)
+- [Jenkins CI CD pipeline with 3 jobs](#jenkins-ci-cd-pipeline-with-3-jobs)
+- [Job 1](#job-1)
+  - [Steps to create a SSH to connect the Jenkins server](#steps-to-create-a-ssh-to-connect-the-jenkins-server)
+    - [Git + GitHub](#git--github)
+    - [Jenkins](#jenkins-1)
+  - [Webhook](#webhook)
+  - [Change the main branch to dev branch to trigger the webhook](#change-the-main-branch-to-dev-branch-to-trigger-the-webhook)
+  - [Job 2](#job-2)
+  - [Job 2 using Git Publisher](#job-2-using-git-publisher)
+  - [Job 3](#job-3)
+    - [In AWS](#in-aws)
+    - [in Jenkins](#in-jenkins)
 
 ## What is CI? Benefits?
  
@@ -89,7 +103,7 @@
 
 # CI / CD pipeline
 
-![CI-CD](./cd-ci.jpg)
+![CI-CD](./images/cd-ci.jpg)
 
 
 ## Why build a CI/CD pipeline?
@@ -139,10 +153,289 @@
 3. **Max # of builds to keep** : `5` 
    
 4. **Build Steps**
-   - click build steps
+   - **click build steps**
   
     ![build stage](<images/build steps.jpg>)
   
-     - select execute shell
+     - **select execute shell**
 
     ![execute shell](<images/execute shell.jpg>)
+
+    - uname -a 
+  
+    ![uname](<images/uname -a .jpg>)
+
+    - save
+
+## Run the project
+
+1. Click on **Build Now**
+
+![build](images/build.jpg)
+
+2. After running the job is going to appear in **pending **
+
+![pending](images/pending.jpg)
+
+3. To see the job -> **Dashboard**
+ 
+![dashboard](images/dashboard.jpg)
+
+4. If is **successful** -> need to see a **sun**
+
+![sun](images/sun.jpg)
+
+5. To access the **console** 
+   - **Build History**
+  
+    ![alt text](images/buid-history.jpg)
+
+    - Click the **#1**
+  
+    ![console](images/console.jpg)
+
+    - **console output**
+
+    ![alt text](images/console-output.jpg)
+
+## Link two projects 
+
+1. Create another project
+2. Navigate to the previous project
+3. Click configure 
+4. Nagivate to **Post-build Actions**
+  
+    ![post-buil-actions](images/post-build-actions.jpg)
+
+5. Enter your project(in our case the second project)
+   
+    ![alt text](images/pot-build.jpg)
+
+6. **Build now**
+   
+    ![alt text](<images/build-in progress.jpg>)
+
+
+
+
+
+# Jenkins CI CD pipeline with 3 jobs
+
+  ![jenkins](images/jenkinss.jpg)
+
+  ![jenkins jobs](<images/jenkins jobs.jpg>)
+
+# Job 1
+## Steps to create a SSH to connect the Jenkins server 
+### Git + GitHub
+1. In **git bash** -> Generate a **new key**
+```bash
+ssh-keygen -t rsa -b 4096 -c "<email>"
+```
+2. **Name the key** : maria-jenkins-2-github-app
+3. Create a **new GitHub repo** and connect it locally too
+4. Display the public key and copy it 
+```bash
+cat <public key>
+```
+5. In **GitHub** -> go to **the repo created**
+ 
+   ![git](images/git.jpg)
+
+6. **Settings**
+7. **Deploy keys** 
+8. **Add key**
+   
+    ![deploy key](<images/deploy key.jpg>)
+
+9.  Paste the <public key>
+10. **ADD**
+
+### Jenkins
+
+1. **New item**
+2. **Enter an item name** : tech263-maria-job1-ci-test
+3. **Configure**:
+   1. *Description*
+   2. *Discard old builds* : 5
+   3. Click GitHub project
+   
+      ![alt text](<images/old build.jpg>)
+
+   4. *Source Code* :
+   
+      ![source code](images/source-code.jpg)
+
+   5. *Add Jenkins Credentials*
+
+      ![alt text](<images/add jenkins credentials.jpg>)
+
+       1. For the private key : **cat <private key>** -> **copy** and **paste**
+   
+    6. *Enable Provide Node & npm*
+   
+        ![alt text](images/node.jpg)
+    
+    7. *Build Steps*
+      
+        ![alt text](images/steps-build.jpg)
+    
+    8. *Build Now*
+
+
+## Webhook
+
+1. *In GitHub navigate to Settings -> WebHook*
+   
+   ![webhook](images/webhook.jpg)
+
+2. *Click Add webhook*
+
+    ![alt text](<images/added webhook.jpg>)
+
+    - *the http://52.31.15.176:8080 - Jenkins Server*
+
+
+## Change the main branch to dev branch to trigger the webhook
+
+1. *In Jenkins change the branch from main to dev *
+2. *Enable GitHub hook trigger for GITScm polling*
+
+    ![alt text](<images/dev bransh.jpg>)
+
+3. In GitHub :
+   1. Navigate to the repo
+   2. Create a branch dev : `git branch dev`
+   3. Switch to the dev branch : `git switch dev`
+   4. Add readme : `nano README.md`
+   5. Push the changes : `git push --set-upstream origin dev`
+
+
+## Job 2
+
+1. Create a **new project**, following previous steps such as providing **GitHub** repo links and selecting your **SSH** key.
+   
+2. Add a **build step**, with the following commands inside:
+ 
+```bash
+git switch main
+git merge origin/dev
+git push origin main
+```
+ 
+These commands will switch the branch to the main (since we're working in the dev branch), merge the dev changes to the main branch and then push it to the GitHub repo.
+
+
+## Job 2 using Git Publisher
+
+1. Remove the **Execute Shell**
+2. In **Post-build Action** -> Select **Git Publisher**
+
+  ![git publisher](<images/git publisher.jpg>)
+
+
+## Job 3
+
+### In AWS
+1. Create an **EC2 instance**
+2. Select **Ubuntu 22.4LTS**
+3. Instance type : **t2.micro**
+4. Key pair : already created one : **tech264-maria-aws-key**
+5. Networking settings : already created **nsg-rule : tech264-maria-app-allow-HTTP-SSH**
+6. Advanced : **user data**
+```bash
+#!/bin/bash
+
+# Check for updates
+echo "update sources list..."
+sudo apt update -y
+echo "update complete"
+
+# Upgrades those checks
+echo "upgrade any packages available..."
+sudo DEBIAN_FRONTEND=noninteractive apt upgrade -y
+echo "upgrade complete"
+
+# Install nginx
+sudo apt install -y nginx
+echo "nginx installed"
+
+# Modify Nginx configuration to set up reverse proxy
+sudo sed -i 's|try_files $uri $uri/ =404;|proxy_pass http://localhost:3000;|' /etc/nginx/sites-available/default
+echo "Nginx reverse proxy configuration updated"
+
+# Test the Nginx configuration
+sudo nginx -t
+
+# Restart Nginx
+sudo systemctl restart nginx
+echo "Nginx restarted with reverse proxy"
+
+echo "install nodejs v20..."
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - &&\
+sudo DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs
+
+echo "check nodejs version..."
+node -v
+echo "nodejs v20 installed"
+
+# Install pm2 globally
+sudo npm install -g pm2
+
+# Cloning Git repo
+echo "Clone Git folder"
+git clone https://github.com/corinnai/tech264-sparta-app.git repo
+echo "Cloned tech264-sparta-app"
+
+echo "Change directory to app"
+cd repo/app
+echo "In app directory"
+
+# Stop all existing pm2 processes
+pm2 stop all
+
+echo "install and run"
+npm install
+echo npm "install done"
+
+
+echo "start"
+pm2 start app.js
+echo "App started with pm2"
+```
+7. Launch the instance 
+
+### in Jenkins
+1. Create a new item : **maria-job3-cd-deploy**
+   
+2. Configuration:
+   1. Description : <give a description>
+   2. **Enable discard old builds** : In **Max # of builds to keep** : `5`
+   3. **GitHub project** : `Project url` : `https://github.com/corinnai/sparta-test-app-ci-cd.git/`
+   4. **Source Code Management** -> 
+      * **Repository URL**: `git@github.com:corinnai/sparta-test-app-ci-cd.git`
+      * **Credentials** : maria-jenkins-2-github-app(to read/write to repo)
+
+      * **Branches to build** -> **Branch Specifier** : `*/dev`
+    5. **Build Environment** 
+        1. **SSH Agent** -> **Credentials**
+        2. **Add** 
+        3. **Display the AWS private key** and **copy paste into Jenkins** 
+      
+            ![jenkins add](<images/jenkins add.jpg>)
+
+        4. After creating **select our specific credentials**
+
+            ![ssh agent-credentials](<images/ssh agent credentials .jpg>)
+
+
+    6. **Build Steps** -> Execute shell
+      ```bash
+      rsync -avz -e "ssh -o StrictHostKeyChecking=no" app ubuntu@<public EC2 IP address>:~
+      ssh -o StrictHostKeyChecking=no ubuntu@<public EC2 IP address> << EOF
+          pm2 stop all
+          cd app
+          npm install
+          pm2 start app.js
+      EOF
+      ```
