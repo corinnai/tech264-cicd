@@ -250,7 +250,7 @@ cat <public key>
    
     ![deploy key](<images/deploy key.jpg>)
 
-9.  Paste the <public key>
+9.  Paste the "public key"
 10. **ADD**
 
 ### Jenkins
