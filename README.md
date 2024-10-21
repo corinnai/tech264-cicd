@@ -300,7 +300,7 @@ cat <public key>
 
 ## Change the main branch to dev branch to trigger the webhook
 
-1. *In Jenkins change the branch from main to dev *
+1. *In Jenkins change the branch from main to dev*
 2. *Enable GitHub hook trigger for GITScm polling*
 
     ![alt text](<images/dev bransh.jpg>)
