@@ -32,7 +32,7 @@
   - [Job 2 using Git Publisher](#job-2-using-git-publisher)
   - [Job 3](#job-3)
     - [In AWS](#in-aws)
-    - [in Jenkins](#in-jenkins)
+    - [In Jenkins](#in-jenkins)
 
 ## What is CI? Benefits?
  
@@ -132,13 +132,14 @@
 1. Having a server already set up with the **user name** and **passord** 
 2. Log in with the username and passord
 
-![jenkins](images/jenkins.jpg)
+    ![jenkins](images/jenkins.jpg)
+
 
 ## Create a new job(or + New Item)
 
 1. Click on the **Create a new job** 
    
-![project](images/project.jpg)
+    ![project](images/project.jpg)
 
 2. **Enter a item name** : `maria-first-project`
    
@@ -146,7 +147,7 @@
   
 ## Configure:
 
-![configure](images/configure.jpg)
+  ![configure](images/configure.jpg)
  
 1. **Description** : testing jenkins
 2. **Enable Discard old builds**
@@ -155,15 +156,15 @@
 4. **Build Steps**
    - **click build steps**
   
-    ![build stage](<images/build steps.jpg>)
+      ![build stage](<images/build steps.jpg>)
   
-     - **select execute shell**
+    - **select execute shell**
 
-    ![execute shell](<images/execute shell.jpg>)
+      ![execute shell](<images/execute shell.jpg>)
 
     - uname -a 
   
-    ![uname](<images/uname -a .jpg>)
+      ![uname](<images/uname -a .jpg>)
 
     - save
 
@@ -171,32 +172,32 @@
 
 1. Click on **Build Now**
 
-![build](images/build.jpg)
+    ![build](images/build.jpg)
 
 2. After running the job is going to appear in **pending **
 
-![pending](images/pending.jpg)
+    ![pending](images/pending.jpg)
 
 3. To see the job -> **Dashboard**
  
-![dashboard](images/dashboard.jpg)
+    ![dashboard](images/dashboard.jpg)
 
 4. If is **successful** -> need to see a **sun**
 
-![sun](images/sun.jpg)
+    ![sun](images/sun.jpg)
 
 5. To access the **console** 
    - **Build History**
   
-    ![alt text](images/buid-history.jpg)
+      ![alt text](images/buid-history.jpg)
 
     - Click the **#1**
   
-    ![console](images/console.jpg)
+      ![console](images/console.jpg)
 
     - **console output**
 
-    ![alt text](images/console-output.jpg)
+      ![alt text](images/console-output.jpg)
 
 ## Link two projects 
 
@@ -228,6 +229,7 @@
 # Job 1
 ## Steps to create a SSH to connect the Jenkins server 
 ### Git + GitHub
+
 1. In **git bash** -> Generate a **new key**
 ```bash
 ssh-keygen -t rsa -b 4096 -c "<email>"
@@ -303,7 +305,7 @@ cat <public key>
 
     ![alt text](<images/dev bransh.jpg>)
 
-3. In GitHub :
+3. *In GitHub* :
    1. Navigate to the repo
    2. Create a branch dev : `git branch dev`
    3. Switch to the dev branch : `git switch dev`
@@ -331,7 +333,7 @@ These commands will switch the branch to the main (since we're working in the de
 1. Remove the **Execute Shell**
 2. In **Post-build Action** -> Select **Git Publisher**
 
-  ![git publisher](<images/git publisher.jpg>)
+    ![git publisher](<images/git publisher.jpg>)
 
 
 ## Job 3
@@ -405,7 +407,7 @@ echo "App started with pm2"
 ```
 7. Launch the instance 
 
-### in Jenkins
+### In Jenkins
 1. Create a new item : **maria-job3-cd-deploy**
    
 2. Configuration:
@@ -439,3 +441,53 @@ echo "App started with pm2"
           pm2 start app.js
       EOF
       ```
+
+After stopping the instance and want to run it again and test the 3 jobs if they are working:
+
+1. SSH into the instance :
+```bash
+ssh -i "~/.ssh/<private aws key>" ubuntu@ec2-<public ip address>.eu-west-1.compute.amazonaws.com
+```
+2. 
+```bash
+ls
+```
+3. 
+```bash
+cd app
+```
+4. 
+```bash
+pm2 start app.js
+```
+5. Test the jobs and the trigger 
+     1. Navigate to the locat repositories 
+     2.
+     ```bash
+     cd into : sparta-test-app-ci-cd
+     ``` 
+     3. 
+     ```bash
+      cd app
+     ```
+     4. 
+     ```bash
+     cd views
+     ```
+     5. 
+     ```bash
+     nano index,ejs
+     ```
+     6. add a h2 or text inside the index.ejs
+     7. 
+     ```bash
+     git add .
+     ```
+     8. 
+     ```bash
+     git commit
+     ```
+     9. 
+     ```bash
+     git push
+     ```
